@@ -1,25 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import Svg from "./Svg";
+import { getData, Data } from "./data";
 
-class App extends Component {
+class App extends React.Component<{}, { data: Data[] }> {
+  data: Data[] = [];
+  constructor(props: {}) {
+    super(props);
+    this.state = { data: getData() };
+  }
+  handleClick = () => {
+    this.setState({
+      data: getData()
+    });
+  };
+
   render() {
+    const { data } = this.state;
+    const svgProps = {
+      height: 500,
+      width: 960,
+      data
+    };
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <button onClick={this.handleClick}>DATA!</button>
+        <Svg {...svgProps} />
       </div>
     );
   }
