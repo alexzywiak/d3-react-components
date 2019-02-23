@@ -12,19 +12,48 @@ interface BarProps {
 
 class Bar extends React.Component<BarProps> {
   ref: SVGRectElement | null = null;
+
   componentDidMount() {
-    d3.select(this.ref).datum(this.props.datum);
+    const { height, datum, yScale } = this.props;
+    d3.select(this.ref)
+      .datum(this.props.datum)
+      .attr("fill", "green")
+      .attr("height", 0)
+      .transition()
+      .attr("height", height - yScale(datum.value));
+  }
+
+  componentDidUpdate(prevProps: BarProps) {
+    const { datum, xScale, yScale, height } = this.props;
+    d3.select(this.ref)
+      .attr("fill", "blue")
+      .attr("x", prevProps.xScale(prevProps.datum.date) as any)
+      .attr("y", prevProps.yScale(prevProps.datum.value) as any)
+      .attr("height", height - prevProps.yScale(prevProps.datum.value))
+      .transition()
+      .attr("x", xScale(datum.date) as any)
+      .attr("y", yScale(datum.value) as any)
+      .attr("height", height - yScale(datum.value));
+  }
+
+  componentWillUnmount() {
+    const { datum, xScale, yScale, height } = this.props;
+    d3.select(this.ref)
+      .attr("fill", "red")
+      .attr("x", xScale(datum.date) as any)
+      .attr("y", yScale(datum.value) as any)
+      .attr("height", height - yScale(datum.value))
+      .transition()
+      .attr("height", 0);
   }
 
   render() {
     const { datum, height, xScale, yScale } = this.props;
     const attributes = {
-      className: "bar",
+      className: `bar ${datum.id}`,
       x: xScale(datum.date),
       y: yScale(datum.value),
-      width: xScale.bandwidth(),
-      height: height - yScale(datum.value),
-      fill: "steelblue"
+      width: xScale.bandwidth()
     };
     return <rect {...attributes} ref={ref => (this.ref = ref)} />;
   }

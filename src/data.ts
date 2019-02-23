@@ -5,7 +5,10 @@ export interface Data {
 }
 
 export const getData = () => {
-  return data.filter(() => Math.floor(Math.random() * 100) > 75);
+  return [
+    { id: 6, date: "12/11/2018", value: 24 },
+    ...data.filter(() => Math.floor(Math.random() * 100) > 75)
+  ];
 };
 
 const data: Data[] = [
@@ -14,7 +17,6 @@ const data: Data[] = [
   { id: 3, date: "10/13/2018", value: 55 },
   { id: 4, date: "5/24/2018", value: 23 },
   { id: 5, date: "7/26/2018", value: 37 },
-  { id: 6, date: "12/11/2018", value: 24 },
   { id: 7, date: "11/23/2018", value: 73 },
   { id: 8, date: "10/7/2018", value: 67 },
   { id: 9, date: "5/26/2018", value: 69 },

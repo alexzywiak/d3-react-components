@@ -16,9 +16,12 @@ export default class Axis extends React.Component<AxisProps> {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate({ scale: prevScale }: AxisProps) {
     if (this.ref) {
-      d3.select(this.ref).call(d3.axisLeft(this.props.scale));
+      d3.select(this.ref)
+        .call(d3.axisLeft(prevScale))
+        .transition()
+        .call(d3.axisLeft(this.props.scale));
     }
   }
 
