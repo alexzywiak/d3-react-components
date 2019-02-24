@@ -1,5 +1,6 @@
 import * as React from "react";
 import Svg from "./Svg";
+import ZoomSVG from "./ZoomSVG";
 import { getData, Data } from "./data";
 
 class App extends React.Component<{}, { data: Data[] }> {
@@ -8,6 +9,7 @@ class App extends React.Component<{}, { data: Data[] }> {
     super(props);
     this.state = { data: getData() };
   }
+
   handleClick = () => {
     this.setState({
       data: getData()
@@ -26,6 +28,9 @@ class App extends React.Component<{}, { data: Data[] }> {
       <div>
         <button onClick={this.handleClick}>DATA!</button>
         <Svg {...svgProps} />
+        <div style={{ border: "1px solid black", width: "500px" }}>
+          <ZoomSVG />
+        </div>
       </div>
     );
   }
