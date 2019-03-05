@@ -19,8 +19,8 @@ class App extends React.Component<{}, { data: Data[] }> {
   render() {
     const { data } = this.state;
     const svgProps = {
-      height: 500,
-      width: 960,
+      svgHeight: 500,
+      svgWidth: 960,
       data
     };
 

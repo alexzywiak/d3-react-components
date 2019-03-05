@@ -6,46 +6,45 @@ import AxisLeft from "./AxisLeft";
 import Bars from "./Bars";
 
 interface SVGProps {
-  height: number;
-  width: number;
+  svgHeight: number;
+  svgWidth: number;
   data: Data[];
 }
 
-class App extends React.Component<SVGProps> {
+export default class Svg extends React.Component<SVGProps> {
   render() {
-    const { height, width, data } = this.props;
+    const { svgHeight, svgWidth, data } = this.props;
 
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const svgWidth = width - margin.left - margin.right;
-    const svgHeight = height - margin.top - margin.bottom;
+    const width = svgWidth - margin.left - margin.right;
+    const height = svgHeight - margin.top - margin.bottom;
 
     const xScale = d3
       .scaleBand()
-      .range([0, svgWidth])
+      .range([0, width])
       .padding(0.1);
 
-    const yScale = d3.scaleLinear().range([svgHeight, 0]);
+    const yScale = d3.scaleLinear().range([height, 0]);
 
     xScale.domain(data.map(d => d.date));
     yScale.domain([0, d3.max(data, d => d.value) || 0]);
 
     const axisBottomProps = {
-      height: svgHeight,
-      width: svgWidth,
+      height,
       scale: xScale
     };
-    const axisLeftProps = { height: svgHeight, width: svgWidth, scale: yScale };
+    const axisLeftProps = { scale: yScale };
 
     const barProps = {
-      height: svgHeight,
-      width: svgWidth,
+      height,
+      width,
       xScale,
       yScale,
       data
     };
 
     return (
-      <svg height={height} width={width}>
+      <svg height={svgHeight} width={svgWidth}>
         <g transform={`translate(${margin.left},${margin.top})`}>
           <AxisBottom {...axisBottomProps} />
           <AxisLeft {...axisLeftProps} />
@@ -55,5 +54,3 @@ class App extends React.Component<SVGProps> {
     );
   }
 }
-
-export default App;
