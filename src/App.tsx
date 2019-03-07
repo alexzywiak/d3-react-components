@@ -3,37 +3,24 @@ import Svg from "./Svg";
 import ZoomSVG from "./ZoomSVG";
 import { getData, Data } from "./data";
 
-class App extends React.Component<{}, { data: Data[] }> {
-  data: Data[] = [];
-  constructor(props: {}) {
-    super(props);
-    this.state = { data: getData() };
-  }
+export default () => {
+  const [data, setData] = React.useState<Data[]>(getData());
 
-  handleClick = () => {
-    this.setState({
-      data: getData()
-    });
+  const svgProps = {
+    svgHeight: 500,
+    svgWidth: 960,
+    data
   };
 
-  render() {
-    const { data } = this.state;
-    const svgProps = {
-      svgHeight: 500,
-      svgWidth: 960,
-      data
-    };
-
-    return (
-      <div>
-        <button onClick={this.handleClick}>DATA!</button>
+  return (
+    <div>
+      <button onClick={() => setData(getData())}>DATA!</button>
+      <div style={{ height: "600px", width: "100%" }}>
         <Svg {...svgProps} />
-        <div style={{ border: "1px solid black", width: "500px" }}>
-          <ZoomSVG />
-        </div>
       </div>
-    );
-  }
-}
-
-export default App;
+      <div style={{ border: "1px solid black", width: "500px" }}>
+        <ZoomSVG />
+      </div>
+    </div>
+  );
+};
