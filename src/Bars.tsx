@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useRef } from "react";
+import { renderLifeCycle } from "./hooks/renderLifecycle";
 import * as d3 from "d3";
 import { Data } from "./data";
 
@@ -10,44 +11,34 @@ interface BarProps {
   yScale: d3.ScaleLinear<any, any>;
 }
 
-class Bar extends React.Component<BarProps> {
-  ref: React.RefObject<SVGRectElement>;
+const Bar = (props: BarProps) => {
+  const rectRef = useRef(null);
+  const { xScale, datum, height, yScale } = props;
+  renderLifeCycle({
+    firstRender: () => {
+      d3.select(rectRef.current)
+        .attr("fill", "green")
+        .attr("x", xScale(datum.date) || 0)
+        .attr("y", yScale(datum.value) || 0)
+        .attr("height", 0)
+        .attr("width", xScale.bandwidth())
+        .transition()
+        .attr("height", height - yScale(datum.value));
+    },
+    updateRender: () => {
+      d3.select(rectRef.current)
+        .attr("fill", "blue")
+        .transition()
+        .attr("x", xScale(datum.date) || 0)
+        .attr("y", yScale(datum.value) || 0)
+        .attr("width", xScale.bandwidth())
+        .attr("height", height - yScale(datum.value));
+    },
+    lastRender: () => console.log("im out", datum)
+  });
 
-  constructor(props: BarProps) {
-    super(props);
-    this.ref = React.createRef();
-  }
-
-  componentDidMount() {
-    const { height, datum, yScale, xScale } = this.props;
-
-    d3.select(this.ref.current)
-      .attr("x", xScale(datum.date) || 0)
-      .attr("y", yScale(datum.value) || 0)
-      .attr("fill", "green")
-      .attr("height", 0)
-      .transition()
-      .attr("height", height - yScale(datum.value));
-  }
-
-  componentDidUpdate() {
-    const { datum, xScale, yScale, height } = this.props;
-    d3.select(this.ref.current)
-      .attr("fill", "blue")
-      .transition()
-      .attr("x", xScale(datum.date) || 0)
-      .attr("y", yScale(datum.value) || 0)
-      .attr("height", height - yScale(datum.value));
-  }
-
-  render() {
-    const { xScale } = this.props;
-    const attributes = {
-      width: xScale.bandwidth()
-    };
-    return <rect data-testid="bar" {...attributes} ref={this.ref} />;
-  }
-}
+  return <rect data-testid="bar" ref={rectRef} />;
+};
 
 interface BarsProps {
   data: Data[];
@@ -57,18 +48,17 @@ interface BarsProps {
   yScale: d3.ScaleLinear<any, any>;
 }
 
-export default class Bars extends React.Component<BarsProps> {
-  render() {
-    const { data, height, width, xScale, yScale } = this.props;
-    const barProps = {
-      height,
-      width,
-      xScale,
-      yScale
-    };
-    const bars = data.map(datum => (
-      <Bar key={datum.id} {...barProps} datum={datum} />
-    ));
-    return <g className="bars">{bars}</g>;
-  }
-}
+export default (props: BarsProps) => {
+  const { data, height, width, xScale, yScale } = props;
+  const barProps = {
+    height,
+    width,
+    xScale,
+    yScale
+  };
+  const bars = data.map(datum => (
+    <Bar key={datum.id} {...barProps} datum={datum} />
+  ));
+
+  return <g className="bars">{height > 0 && width > 0 ? bars : null}</g>;
+};

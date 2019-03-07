@@ -1,33 +1,24 @@
-import * as React from "react";
+import React, { useRef } from "react";
 import * as d3 from "d3";
+import { renderLifeCycle } from "./hooks/renderLifecycle";
 
 interface AxisProps {
   scale: d3.ScaleLinear<any, any>;
 }
 
-export default class Axis extends React.Component<AxisProps> {
-  ref: React.RefObject<SVGGElement>;
+export default (props: AxisProps) => {
+  const gRef = useRef<SVGGElement>(null);
 
-  constructor(props: AxisProps) {
-    super(props);
-    this.ref = React.createRef();
-  }
-
-  componentDidMount() {
-    if (this.ref.current) {
-      d3.select(this.ref.current).call(d3.axisLeft(this.props.scale));
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.ref.current) {
-      d3.select(this.ref.current)
+  renderLifeCycle({
+    firstRender: () =>
+      gRef.current && d3.select(gRef.current).call(d3.axisLeft(props.scale)),
+    updateRender: () =>
+      gRef.current &&
+      d3
+        .select(gRef.current)
         .transition()
-        .call(d3.axisLeft(this.props.scale));
-    }
-  }
+        .call(d3.axisLeft(props.scale))
+  });
 
-  render() {
-    return <g ref={this.ref} />;
-  }
-}
+  return <g ref={gRef} />;
+};
