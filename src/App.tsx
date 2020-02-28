@@ -1,12 +1,12 @@
 import * as React from "react";
-import Svg from "./Svg";
-import ZoomSVG from "./ZoomSVG";
+import BarGraph from "./components/BarGraph";
 import { getData, Data } from "./data";
+import ZoomieCircle from "./components/ZoomieCircle";
 
 export default () => {
   const [data, setData] = React.useState<Data[]>(getData());
 
-  const svgProps = {
+  const barGraphProps = {
     svgHeight: 500,
     svgWidth: 960,
     data
@@ -16,10 +16,10 @@ export default () => {
     <div>
       <button onClick={() => setData(getData())}>DATA!</button>
       <div style={{ height: "600px", width: "100%" }}>
-        <Svg {...svgProps} />
+        <BarGraph {...barGraphProps} />
       </div>
       <div style={{ border: "1px solid black", width: "500px" }}>
-        <ZoomSVG />
+        <ZoomieCircle />
       </div>
     </div>
   );

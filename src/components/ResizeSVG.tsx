@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useContainerSize } from "./hooks/containerSize";
+import { useContainerSize } from "../hooks/containerSize";
 
 interface SVGProps {
   children: (renderProps: { height: number; width: number }) => JSX.Element;
@@ -21,7 +21,7 @@ export default ({
       {containerDiv ? (
         <svg height={svgHeight} width={svgWidth}>
           <g transform={`translate(${margin.left},${margin.top})`}>
-            {children({ height, width })}
+            {height && width ? children({ height, width }) : null}
           </g>
         </svg>
       ) : null}

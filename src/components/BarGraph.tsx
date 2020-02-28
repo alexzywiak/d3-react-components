@@ -1,6 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
-import { Data } from "./data";
+import { Data } from "../data";
 import ResizeSVG from "./ResizeSVG";
 import AxisBottom from "./AxisBottom";
 import AxisLeft from "./AxisLeft";

@@ -1,7 +1,7 @@
 import React from "react";
 import "jest-dom/extend-expect";
 import { render } from "react-testing-library";
-import Svg from "../Svg";
+import BarGraph from "../components/BarGraph";
 
 it("renders a bar for each data point", () => {
   const svgHeight = 500;
@@ -23,12 +23,12 @@ it("renders a bar for each data point", () => {
   };
 
   const { rerender, getAllByTestId, getByTestId } = render(
-    <Svg {...barProps} />
+    <BarGraph {...barProps} />
   );
   expect(getAllByTestId("bar").length).toBe(2);
   expect(getByTestId("bar")).toHaveAttribute("fill", "green");
 
-  rerender(<Svg {...barProps2} />);
+  rerender(<BarGraph {...barProps2} />);
 
   expect(getAllByTestId("bar").length).toBe(1);
   expect(getByTestId("bar")).toHaveAttribute("fill", "blue");
