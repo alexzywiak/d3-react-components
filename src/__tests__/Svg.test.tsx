@@ -3,6 +3,7 @@ import "jest-dom/extend-expect";
 import { render } from "react-testing-library";
 import BarGraph from "../components/BarGraph";
 
+// Update to mock out ResizeSVG so that height and width values are set
 it("renders a bar for each data point", () => {
   const svgHeight = 500;
   const svgWidth = 500;

@@ -57,7 +57,7 @@ export default (props: BarsProps) => {
     yScale
   };
   const bars = data.map(datum => (
-    <Bar key={datum.id} {...barProps} datum={datum} />
+    <Bar data-testid="bars" key={datum.id} {...barProps} datum={datum} />
   ));
 
   return <g className="bars">{height > 0 && width > 0 ? bars : null}</g>;
